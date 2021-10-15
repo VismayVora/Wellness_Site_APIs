@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     #'logs.apps.LogsConfig'
     'logs',
-    'accounts',
+    #'accounts',
     'rest_framework.authtoken',
 ]
 
@@ -86,7 +86,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'accounts.Account'
+#AUTH_USER_MODEL = 'accounts.Account'
 
 
 # Password validation

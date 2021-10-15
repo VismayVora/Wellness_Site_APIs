@@ -14,6 +14,7 @@ class DietLog(models.Model):
     consumption_time = models.DateTimeField()
     calories = models.DecimalField(max_digits=6, decimal_places=3)
     notes = models.TextField(max_length = 300)
+    owner = models.ForeignKey('accounts.Account', related_name='DietLog', on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['created']
