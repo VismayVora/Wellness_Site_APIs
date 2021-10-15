@@ -7,7 +7,7 @@ from logs.models import DietLog
 from logs.serializers import DietLogSerializer #,AccountSerializer
 
 # Create your views here.
-class DietLogViewset(viewsets.ModelViewSet):
+class DietLogViewSet(viewsets.ModelViewSet):
     queryset = DietLog.objects.all()
     serializer_class = DietLogSerializer
     #permission_classes = [permissions.IsAuthenticatedorReadOnly]

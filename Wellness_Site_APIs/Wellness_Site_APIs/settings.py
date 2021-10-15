@@ -39,9 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    #'logs.apps.LogsConfig'
-    'logs',
-    #'accounts',
+    'logs.apps.LogsConfig',
+    'accounts.apps.AccountsConfig',
     'rest_framework.authtoken',
 ]
 
@@ -86,7 +85,7 @@ DATABASES = {
     }
 }
 
-#AUTH_USER_MODEL = 'accounts.Account'
+AUTH_USER_MODEL = 'accounts.Account'
 
 
 # Password validation
@@ -108,6 +107,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+      'rest_framework.permissions.IsAuthenticated',
+  ),
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ]
