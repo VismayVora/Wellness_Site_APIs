@@ -4,34 +4,57 @@ from django.utils.translation import ugettext_lazy as _
 
 # Create your models here.
 class AccountManager(BaseUserManager):
-    def create_user(self, email, password=None, **kwargs):
+    #def create_user(self, email, password=None, **kwargs):
         # Ensure that an email address is set
-        if not email:
-            raise ValueError('Users must have a valid e-mail address')
+        #if not email:
+            #raise ValueError('Users must have a valid e-mail address')
 
         # Ensure that a username is set
         #if not kwargs.get('username'):
             #raise ValueError('Users must have a valid username')
 
-        account = self.model(
-            email=self.normalize_email(email),
-            username=kwargs.get('username'),
-            first_name=kwargs.get('firstname', None),
-            last_name=kwargs.get('lastname', None),
-        )
+        #account = self.model(
+            #email=self.normalize_email(email),
+            #username=kwargs.get('username'),
+            #first_name=kwargs.get('firstname', None),
+            #last_name=kwargs.get('lastname', None),
+        #)
 
-        account.set_password(password)
-        account.save()
+        #account.set_password(password)
+        #account.save()
 
-        return account
+        #return account
 
-    def create_superuser(self, email, password=None, **kwargs):
-        account = self.create_user(email, password, **kwargs)
+    #def create_superuser(self, email, password=None, **kwargs):
+        #account = self.create_user(email, password, **kwargs)
 
-        account.is_admin = True
-        account.save()
+        #account.is_admin = True
+        #account.save()
 
-        return account
+        #return account
+    
+    def create_user(self, email, password=None):
+
+        if email is None:
+            raise TypeError('Users must have an email address.')
+
+        user = self.model(email=self.normalize_email(email))
+        user.set_password(password)
+        user.save()
+
+        return user
+
+    def create_superuser(self, email, password):
+
+        if password is None:
+            raise TypeError('Superusers must have a password.')
+
+        user = self.create_user(email, password)
+        user.is_superuser = True
+        user.is_staff = True
+        user.save()
+
+        return user
 
 class Account(AbstractBaseUser):
     username = models.CharField(unique=True, max_length=50)
@@ -65,8 +88,8 @@ class Account(AbstractBaseUser):
         # Simplest possible answer: Yes, always
         return True
 
-    @property
-    def is_staff(self):
-        "Is the user a member of staff?"
+    #@property
+    #def is_staff(self):
+        #"Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
-        return self.is_admin
+        #return self.is_admin
