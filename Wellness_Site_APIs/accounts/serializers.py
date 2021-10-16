@@ -1,7 +1,10 @@
 from rest_framework import serializers
-from accounts.models import Account
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
-class AccountSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
+    #snippets = serializers.PrimaryKeyRelatedField(many=True, queryset=Snippet.objects.all())
+
     class Meta:
         model = User
-        fields = "__all__"
+        fields = ['email']

@@ -5,7 +5,7 @@ from logs import views
 
 router = DefaultRouter()
 router.register(r'dietlogs', views.DietLogViewSet)
-#router.register(r'users', views.AccountViewSet)
+router.register(r'users', views.UserViewSet)
 
 urlpatterns = [
     url('', include(router.urls))

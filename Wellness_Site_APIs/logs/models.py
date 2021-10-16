@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 # Create your models here.
 class DietLog(models.Model):
@@ -13,8 +15,9 @@ class DietLog(models.Model):
     quantity = models.IntegerField()
     consumption_time = models.DateTimeField(null = True, blank = True)
     calories = models.DecimalField(max_digits=6, decimal_places=3)
-    notes = models.TextField(max_length = 300)
-    #owner = models.ForeignKey('accounts.Account', related_name='DietLog', on_delete=models.CASCADE)
+    notes = models.TextField(max_length = 300, null = True, blank = True)
+    owner = models.ForeignKey(
+        'accounts.User', related_name='DietLog', on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['created']

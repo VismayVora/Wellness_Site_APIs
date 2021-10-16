@@ -1,79 +1,83 @@
 from django.db import models
-from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager)
-from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.models import (
+    BaseUserManager, AbstractBaseUser
+)
 
-# Create your models here.
-class AccountManager(BaseUserManager):
-    #def create_user(self, email, password=None, **kwargs):
-        # Ensure that an email address is set
-        #if not email:
-            #raise ValueError('Users must have a valid e-mail address')
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
+from django.conf import settings
 
-        # Ensure that a username is set
-        #if not kwargs.get('username'):
-            #raise ValueError('Users must have a valid username')
-
-        #account = self.model(
-            #email=self.normalize_email(email),
-            #username=kwargs.get('username'),
-            #first_name=kwargs.get('firstname', None),
-            #last_name=kwargs.get('lastname', None),
-        #)
-
-        #account.set_password(password)
-        #account.save()
-
-        #return account
-
-    #def create_superuser(self, email, password=None, **kwargs):
-        #account = self.create_user(email, password, **kwargs)
-
-        #account.is_admin = True
-        #account.save()
-
-        #return account
-    
+# This code is triggered whenever a new user has been created and saved to the database
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
+        
+class UserManager(BaseUserManager):
     def create_user(self, email, password=None):
+        """
+        Creates and saves a User with the given email and password.
+        """
+        if not email:
+            raise ValueError('Users must have an email address')
 
-        if email is None:
-            raise TypeError('Users must have an email address.')
+        user = self.model(
+            email=self.normalize_email(email),
+        )
 
-        user = self.model(email=self.normalize_email(email))
         user.set_password(password)
-        user.save()
+        user.save(using=self._db)
+        return user
 
+    def create_staffuser(self, email, password):
+        """
+        Creates and saves a staff user with the given email and password.
+        """
+        user = self.create_user(
+            email,
+            password=password,
+        )
+        user.staff = True
+        user.save(using=self._db)
         return user
 
     def create_superuser(self, email, password):
-
-        if password is None:
-            raise TypeError('Superusers must have a password.')
-
-        user = self.create_user(email, password)
-        user.is_superuser = True
-        user.is_staff = True
-        user.save()
-
+        """
+        Creates and saves a superuser with the given email and password.
+        """
+        user = self.create_user(
+            email,
+            password=password,
+        )
+        user.staff = True
+        user.admin = True
+        user.save(using=self._db)
         return user
 
-class Account(AbstractBaseUser):
-    username = models.CharField(unique=True, max_length=50)
-    email = models.EmailField(unique=True)
 
-    first_name = models.CharField(max_length=100, blank=True)
-    last_name = models.CharField(max_length=100, blank=True)
-    profile_pic = models.ImageField(upload_to='images/')
+class User(AbstractBaseUser):
+    email = models.EmailField(
+        verbose_name='email address',
+        max_length=255,
+        unique=True,
+    )
+    is_active = models.BooleanField(default=True)
+    staff = models.BooleanField(default=False) # a admin user; non super-user
+    admin = models.BooleanField(default=False) # a superuser
 
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
-
-    is_admin = models.BooleanField(default=False)
-    is_active = models.BooleanField(_('active'), default=True)
-
-    objects = AccountManager()
+    # notice the absence of a "Password field", that is built in.
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = [] # Email & Password are required by default.
+
+    def get_full_name(self):
+        # The user is identified by their email address
+        return self.email
+
+    def get_short_name(self):
+        # The user is identified by their email address
+        return self.email
 
     def __str__(self):
         return self.email
@@ -88,8 +92,15 @@ class Account(AbstractBaseUser):
         # Simplest possible answer: Yes, always
         return True
 
-    #@property
-    #def is_staff(self):
-        #"Is the user a member of staff?"
-        # Simplest possible answer: All admins are staff
-        #return self.is_admin
+    @property
+    def is_staff(self):
+        "Is the user a member of staff?"
+        return self.staff
+
+    @property
+    def is_admin(self):
+        "Is the user a admin member?"
+        return self.admin
+    
+    objects = UserManager()
+
