@@ -25,5 +25,21 @@ class DietLog(models.Model):
     def save(self, *args, **kwargs):
         super(DietLog, self).save(*args, **kwargs)
 
+class WorkoutLog(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=50)
+
+    duration = models.IntegerField()
+    workout_time = models.DateTimeField(null = True, blank = True)
+    notes = models.TextField(max_length = 300, null = True, blank = True)
+    owner = models.ForeignKey(
+        'accounts.User', related_name='WorkoutLog', on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['created']
+    
+    def save(self, *args, **kwargs):
+        super(WorkoutLog, self).save(*args, **kwargs)
+
     
 

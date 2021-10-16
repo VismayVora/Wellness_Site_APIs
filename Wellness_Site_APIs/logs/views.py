@@ -4,18 +4,11 @@ from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-from logs.models import DietLog
-from logs.serializers import DietLogSerializer
+from logs.models import DietLog, WorkoutLog
+from logs.serializers import DietLogSerializer, WorkoutLogSerializer
 from accounts.serializers import UserSerializer
 
 # Create your views here.
-class DietLogViewSet(viewsets.ModelViewSet):
-    queryset = DietLog.objects.all()
-    serializer_class = DietLogSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def perform_create(self,serializer):
-        serializer.save(owner = self.request.user)
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     """
@@ -23,3 +16,19 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+class DietLogViewSet(viewsets.ModelViewSet):
+    queryset = DietLog.objects.all()
+    serializer_class = DietLogSerializer
+    permission_classes = [permissions.IsAuthenticated,]
+
+    def perform_create(self,serializer):
+        serializer.save(owner = self.request.user)
+
+class WorkoutLogViewSet(viewsets.ModelViewSet):
+    queryset = WorkoutLog.objects.all()
+    serializer_class = WorkoutLogSerializer
+    permission_classes = [permissions.IsAuthenticated,]
+
+    def perform_create(self,serializer):
+        serializer.save(owner = self.request.user)
