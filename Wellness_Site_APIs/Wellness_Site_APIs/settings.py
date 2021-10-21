@@ -115,6 +115,13 @@ REST_FRAMEWORK = {
     ]
 }
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True # Have to understand what this is
+EMAIL_PORT = 587 #Default is 25...what's the use of 587?
+EMAIL_HOST_USER = 'voravismay99@gmail.com'
+EMAIL_HOST_PASSWORD = 'djangoisop'#password associated with above email-id
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
