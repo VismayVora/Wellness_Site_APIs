@@ -1,11 +1,12 @@
 from django.shortcuts import render
-from rest_framework import renderers, viewsets, permissions
+from rest_framework import renderers, viewsets, permissions, generics, mixins
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-from logs.models import DietLog, WorkoutLog
-from logs.serializers import DietLogSerializer, WorkoutLogSerializer
+from logs.models import DietLog, WorkoutLog #HealthData
+from logs.serializers import DietLogSerializer, WorkoutLogSerializer #HealthDataSerializer
 from accounts.serializers import UserSerializer
 
 # Create your views here.
@@ -22,6 +23,9 @@ class DietLogViewSet(viewsets.ModelViewSet):
     serializer_class = DietLogSerializer
     permission_classes = [permissions.IsAuthenticated,]
 
+    def get_queryset(self):
+        return DietLog.objects.filter(owner=self.request.user)
+
     def perform_create(self,serializer):
         serializer.save(owner = self.request.user)
 
@@ -30,5 +34,22 @@ class WorkoutLogViewSet(viewsets.ModelViewSet):
     serializer_class = WorkoutLogSerializer
     permission_classes = [permissions.IsAuthenticated,]
 
+    def get_queryset(self):
+        return WorkoutLog.objects.filter(owner=self.request.user)
+
     def perform_create(self,serializer):
         serializer.save(owner = self.request.user)
+
+'''
+class HealthDataAPIView(viewsets.ModelViewSet):
+    queryset = HealthData.objects.all()
+    serializer_class = HealthDataSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return HealthData.objects.filter(owner=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+'''
+
