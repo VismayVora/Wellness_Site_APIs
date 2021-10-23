@@ -12,5 +12,5 @@ router.register(r'workoutlogs', views.WorkoutLogViewSet)
 
 urlpatterns = [
     url('', include(router.urls)),
-    #path('healthdata/',views.HealthDataAPIView.as_view({'get': 'list','post':'create','patch':'partial_update','delete':'destroy'}),name='Your health data'),
+    path('healthdata/',views.HealthDataAPIView.as_view({'get': 'list','post':'create','patch':'partial_update','delete':'destroy'}),name='Your health data'),
 ]

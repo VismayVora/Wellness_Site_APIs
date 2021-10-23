@@ -40,7 +40,7 @@ class WorkoutLog(models.Model):
     
     def save(self, *args, **kwargs):
         super(WorkoutLog, self).save(*args, **kwargs)
-'''
+
 class HealthData(models.Model):
     owner = models.OneToOneField(
         'accounts.User', related_name='HealthData', on_delete=models.CASCADE)
@@ -48,7 +48,6 @@ class HealthData(models.Model):
     weight = models.DecimalField(max_digits=5,decimal_places=2)
     age = models.IntegerField()
     gender = models.CharField(max_length=2,choices=[('M','Male'),('F','Female')], blank=True)
-'''
 
 
 

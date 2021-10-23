@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from logs.models import DietLog,WorkoutLog#HealthData
+from logs.models import DietLog,WorkoutLog,HealthData
 
 
 class DietLogSerializer(serializers.HyperlinkedModelSerializer):
@@ -18,7 +18,7 @@ class WorkoutLogSerializer(serializers.HyperlinkedModelSerializer):
         model = WorkoutLog
         fields = '__all__'
 
-'''
+
 class HealthDataSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source = 'owner.email')
     bmi = serializers.SerializerMethodField()
@@ -33,5 +33,3 @@ class HealthDataSerializer(serializers.ModelSerializer):
         bmi = obj.weight/((obj.height/100)**2)
         bmi = round(bmi,2)
         return bmi
-
-'''

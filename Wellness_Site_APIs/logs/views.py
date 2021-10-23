@@ -5,8 +5,8 @@ from rest_framework.decorators import api_view
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-from logs.models import DietLog, WorkoutLog #HealthData
-from logs.serializers import DietLogSerializer, WorkoutLogSerializer #HealthDataSerializer
+from logs.models import DietLog, WorkoutLog, HealthData
+from logs.serializers import DietLogSerializer, WorkoutLogSerializer, HealthDataSerializer
 from accounts.serializers import UserSerializer
 
 # Create your views here.
@@ -40,7 +40,7 @@ class WorkoutLogViewSet(viewsets.ModelViewSet):
     def perform_create(self,serializer):
         serializer.save(owner = self.request.user)
 
-'''
+
 class HealthDataAPIView(viewsets.ModelViewSet):
     queryset = HealthData.objects.all()
     serializer_class = HealthDataSerializer
@@ -51,5 +51,5 @@ class HealthDataAPIView(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
-'''
+
 
