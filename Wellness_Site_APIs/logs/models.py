@@ -43,7 +43,7 @@ class WorkoutLog(models.Model):
 
 class HealthData(models.Model):
     owner = models.OneToOneField(
-        'accounts.User', related_name='HealthData', on_delete=models.CASCADE)
+        'accounts.User', related_name='HealthData', on_delete=models.CASCADE, primary_key = True, default = 'accounts.User')
     height = models.DecimalField(max_digits=6, decimal_places=2)
     weight = models.DecimalField(max_digits=5,decimal_places=2)
     age = models.IntegerField()

@@ -48,6 +48,13 @@ class HealthDataAPIView(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return HealthData.objects.filter(owner=self.request.user)
+    
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        # make sure to catch 404's below
+        obj = queryset.get(pk=self.request.user_id)
+        self.check_object_permissions(self.request, obj)
+        return obj
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
