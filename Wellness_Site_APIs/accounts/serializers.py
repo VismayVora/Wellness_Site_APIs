@@ -10,7 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
     
     DietLog = DietLogSerializer(many=True, read_only = True)
     WorkoutLog = WorkoutLogSerializer(many=True, read_only = True)
-    HealthData = HealthDataSerializer()
+    HealthData = HealthDataSerializer(read_only = True)
 
     class Meta:
         model = User
