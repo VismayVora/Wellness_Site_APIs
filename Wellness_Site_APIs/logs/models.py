@@ -49,6 +49,36 @@ class HealthData(models.Model):
     age = models.IntegerField()
     gender = models.CharField(max_length=2,choices=[('M','Male'),('F','Female')], blank=True)
 
+'''
+class Task_Category(models.Model):
+	owner = models.ForeignKey(User,on_delete = models.CASCADE)
+	title = models.CharField(max_length = 50)
+	description = models.TextField(blank = True)
+	
+	def __str__(self):
+		return self.title
+
+	class Meta:
+		verbose_name = ("Category")
+		verbose_name_plural = ("Categories")
+
+class Task(models.Model):
+	owner = models.ForeignKey(User, on_delete = models.CASCADE)
+	category = models.ForeignKey(Task_Category,null=True,on_delete = models.SET_NULL)
+	title = models.CharField(max_length = 50)
+	description = models.TextField(blank = True)
+	priority_no = models.PositiveIntegerField(blank = True)
+	status = models.BooleanField(default=False,blank = True)
+	duedate = models.DateTimeField(blank = True)
+	
+	def __str__(self):
+		return self.title
+
+	class Meta:
+		ordering = ['status']
+'''
+
+
 
 
     

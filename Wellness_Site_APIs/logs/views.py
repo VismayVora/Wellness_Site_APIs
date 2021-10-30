@@ -13,6 +13,8 @@ from accounts.serializers import UserSerializer
 from rest_framework import status
 from django.http.response import Http404
 
+from logs.permissions import EditLogPermission
+
 # Create your views here.
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
@@ -25,7 +27,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 class DietLogViewSet(viewsets.ModelViewSet):
     queryset = DietLog.objects.all()
     serializer_class = DietLogSerializer
-    permission_classes = [permissions.IsAuthenticated,]
+    permission_classes = [permissions.IsAuthenticated, EditLogPermission]
 
     def get_queryset(self):
         return DietLog.objects.filter(owner=self.request.user)
@@ -36,7 +38,7 @@ class DietLogViewSet(viewsets.ModelViewSet):
 class WorkoutLogViewSet(viewsets.ModelViewSet):
     queryset = WorkoutLog.objects.all()
     serializer_class = WorkoutLogSerializer
-    permission_classes = [permissions.IsAuthenticated,]
+    permission_classes = [permissions.IsAuthenticated, EditLogPermission]
 
     def get_queryset(self):
         return WorkoutLog.objects.filter(owner=self.request.user)
