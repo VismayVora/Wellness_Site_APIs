@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from accounts.models import create_auth_token
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -59,6 +60,7 @@ def verification_view(request):
         user = User.objects.get(auth_token = token)
         if not user.is_active:
             user.is_active = True
+            create_auth_token(settings.AUTH_USER_MODEL)
             user.save()
     return Response('Your account has been successfully verified', status=status.HTTP_200_OK)
 
